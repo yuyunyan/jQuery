@@ -264,23 +264,23 @@
 @section Scripts{
 
     <script src="~/Scripts/umega/jquery.steps.min.js"></script>
-    <script src="~/Scripts/services/sabio.services.UpgradeDealer.js"></script>
-    <script src="~/Scripts/services/sabio.services.addresses.js"></script>
-    <script src="~/Scripts/services/sabio.services.categories.js"></script>
-    <script src="~/Scripts/services/sabio.services.vehicles.js"></script>
+    <script src="~/Scripts/services/spright.services.UpgradeDealer.js"></script>
+    <script src="~/Scripts/services/spright.services.addresses.js"></script>
+    <script src="~/Scripts/services/spright.services.categories.js"></script>
+    <script src="~/Scripts/services/spright.services.vehicles.js"></script>
 
     <script type="text/javascript">
-        sabio.page.modelsArray = [];
-        sabio.page.startUp = function () {
+        spright.page.modelsArray = [];
+        spright.page.startUp = function () {
             var form = $("#steps-form").show();
 
             form.steps({
                 headerTag: "h3",
                 bodyTag: "fieldset",
                 transitionEffect: "slideLeft",
-                onStepChanging: sabio.page.handlers.onStepChange,
-                onFinishing: sabio.page.handlers.onFinish,
-                onFinished: sabio.page.handlers.onFinished,
+                onStepChanging: spright.page.handlers.onStepChange,
+                onFinishing: spright.page.handlers.onFinish,
+                onFinished: spright.page.handlers.onFinished,
             }).validate({
                 errorPlacement: function errorPlacement(error, element) { element.before(error); },
                 rules: {
@@ -378,13 +378,13 @@
 
             }) //end of .steps
 
-            $('#txtName').on('blur', sabio.page.handlers.convertSlug);//CATEGORY MANAGER FORM
+            $('#txtName').on('blur', spright.page.handlers.convertSlug);//CATEGORY MANAGER FORM
 
             // *** //***                 BEGIN   VEHICLE FORM                                     *** //***//
-            sabio.page.loadYears();
-            $('#Year').change(sabio.page.handlers.vehicleYearSelected);
-            $('#Make').change(sabio.page.handlers.vehicleMakeSelected);
-            $('#Model').change(sabio.page.handlers.vehicleModelSelected);
+            spright.page.loadYears();
+            $('#Year').change(spright.page.handlers.vehicleYearSelected);
+            $('#Make').change(spright.page.handlers.vehicleMakeSelected);
+            $('#Model').change(spright.page.handlers.vehicleModelSelected);
             // *** //***                 END VEHICLE FORM                                     *** //***//
 
 
@@ -392,7 +392,7 @@
 
         } //end of startUp
 
-        sabio.page.handlers.onStepChange = function (event, currentIndex, newIndex) {
+        spright.page.handlers.onStepChange = function (event, currentIndex, newIndex) {
             // Allways allow previous action even if the current form is not valid!
             var form = $("#steps-form");
 
@@ -414,7 +414,7 @@
                         Email: $("#DealerEmail").val(),
                         DealerName: $("#DealerCompanyName").val()
                     }
-                    sabio.services.UpgradeDealer.startInsertDealerInfo(startData, sabio.page.handlers.onCreateDealerSuccess, sabio.page.AjaxError);
+                    spright.services.UpgradeDealer.startInsertDealerInfo(startData, spright.page.handlers.onCreateDealerSuccess, spright.page.AjaxError);
 
                     console.log("start form submiting", startData);
                     break;
@@ -427,7 +427,7 @@
                         ZipCode: $("#zipCode").val(),
                         StateId: $("#stateId").val()
                     }
-                    sabio.services.addresses.createAddress(addressData, sabio.page.handlers.onAddressCreateSuccess, sabio.page.AjaxError);
+                    spright.services.addresses.createAddress(addressData, spright.page.handlers.onAddressCreateSuccess, spright.page.AjaxError);
                     console.log("address ajax", addressData);
                     break;
                 case 2:
@@ -436,7 +436,7 @@
                         description: $("#txtMessage").val(),
                         slug: $("#slugField").val()
                     }
-                    sabio.services.categories.insertCat(catData, sabio.page.handlers.onCatCreateSuccess, sabio.page.AjaxError);
+                    spright.services.categories.insertCat(catData, spright.page.handlers.onCatCreateSuccess, spright.page.AjaxError);
                     console.log("cat ajax", catData);
                     break;
 
@@ -445,7 +445,7 @@
             console.log("index", currentIndex, newIndex);
             return form.valid();
         }
-        sabio.page.handlers.onFinish = function (event, currentIndex) {
+        spright.page.handlers.onFinish = function (event, currentIndex) {
             var form = $("#steps-form");
             form.validate().settings.ignore = ":disabled";
             var vehicleData = {
@@ -454,15 +454,15 @@
                 Model: $("#Model").val(),
                 SellPrice: $("#SellPrice").val()
             }
-            sabio.services.vehicles.addVehicle(vehicleData, sabio.page.handlers.onVehicleCreateSuccess, sabio.page.AjaxError);
+            spright.services.vehicles.addVehicle(vehicleData, spright.page.handlers.onVehicleCreateSuccess, spright.page.AjaxError);
             console.log("vehicle ajax", vehicleData);
             return form.valid();
         }
-        sabio.page.handlers.onFinished = function (event, currentIndex) {
+        spright.page.handlers.onFinished = function (event, currentIndex) {
             alert("Submitted!");
         }
 
-        sabio.page.handlers.convertSlug = function () {
+        spright.page.handlers.convertSlug = function () {
             console.log("on blur working")
             var nameInput = $('#txtName').val();
             $('#slugField').val(nameInput.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-'));
@@ -472,7 +472,7 @@
 
 
         //BEGIN VEHICLE FORM
-        sabio.page.loadYears = function () {
+        spright.page.loadYears = function () {
             for (var i = 1990; i < 2017; i++) {
                 $('<option/>', {
                     value: i,
@@ -481,16 +481,16 @@
             }
         };
 
-        sabio.page.handlers.vehicleYearSelected = function () {
+        spright.page.handlers.vehicleYearSelected = function () {
             var year = $('#Year').val();
             //console.log(year);
             $('.vehicleMakeOther, .vehicleModelOther').addClass('hidden');
             $('#Make option').remove();
             $('#Model option').remove();
-            sabio.page.loadMakes(year);
+            spright.page.loadMakes(year);
         };
 
-        sabio.page.handlers.vehicleMakeSelected = function () {
+        spright.page.handlers.vehicleMakeSelected = function () {
             var make = $('#Make').val();
             //console.log(make);
             if (make === 'Other') {
@@ -501,40 +501,40 @@
                 $('#Model').find("option[value='Other']").attr('selected', true);
             } else {
                 $('.vehicleMakeOther, .vehicleModelOther').addClass('hidden');
-                sabio.page.loadModels(make);
+                spright.page.loadModels(make);
             }
 
         };
 
-        sabio.page.handlers.vehicleModelSelected = function () {
+        spright.page.handlers.vehicleModelSelected = function () {
             var model = $('#Model').val();
             if (model === 'Other') {
                 // show others input
                 $('.vehicleModelOther').removeClass('hidden');
             } else {
                 $('.vehicleModelOther').addClass('hidden');
-                //sabio.page.loadModels(make);
+                //spright.page.loadModels(make);
             }
 
         }
 
-        sabio.page.loadMakes = function (year) {
-            sabio.services.vehicles.loadMakes(year, sabio.page.populateMakes, sabio.page.ajaxError);
+        spright.page.loadMakes = function (year) {
+            spright.services.vehicles.loadMakes(year, spright.page.populateMakes, spright.page.ajaxError);
         };
 
-        sabio.page.populateMakes = function (makeObj) {
+        spright.page.populateMakes = function (makeObj) {
             // the makeObj has an Array, the makes are in the array
             //console.log("there are " + makeObj.makes.length + "makes");
             // remove all options first
             $('#Make option').remove();
             $('<option/>', { value: '', html: '' }).appendTo('#Make');
-            sabio.page.modelsArray = makeObj.makes;
-            console.log("model array here is " + sabio.page.modelsArray);
-            for (var i = 0; i < sabio.page.modelsArray.length; i++) {
+            spright.page.modelsArray = makeObj.makes;
+            console.log("model array here is " + spright.page.modelsArray);
+            for (var i = 0; i < spright.page.modelsArray.length; i++) {
                 //console.log(makes.makes[i]);
                 $('<option/>', {
-                    value: sabio.page.modelsArray[i].name,
-                    html: sabio.page.modelsArray[i].name
+                    value: spright.page.modelsArray[i].name,
+                    html: spright.page.modelsArray[i].name
                 }).appendTo('#Make');
                 // makeArry[i] also comes with model informaton, need to pass it to
                 // models after a make is selected
@@ -542,48 +542,48 @@
             $('<option/>', { value: 'Other', html: 'Other' }).appendTo('#Make');
 
             // if it's an update, then select the vehicle Make
-            if (sabio.page.updateVehicleObj != null) {
+            if (spright.page.updateVehicleObj != null) {
                 var isNotOther = false;
                 // check if the make is in the list, if not, put it in others
-                for (var i = 0; i < sabio.page.modelsArray.length; i++) {
-                    if (sabio.page.modelsArray[i].name === sabio.page.updateVehicleObj.vehicleMake) {
+                for (var i = 0; i < spright.page.modelsArray.length; i++) {
+                    if (spright.page.modelsArray[i].name === spright.page.updateVehicleObj.vehicleMake) {
                         isNotOther = true;
                     }
                 }
                 if (isNotOther == true) {
-                    $('#Make').val(sabio.page.updateVehicleObj.vehicleMake);
-                    sabio.page.loadModels(sabio.page.updateVehicleObj.vehicleMake);
+                    $('#Make').val(spright.page.updateVehicleObj.vehicleMake);
+                    spright.page.loadModels(spright.page.updateVehicleObj.vehicleMake);
                 } else {
                     $('.vehicleMakeOther, .vehicleModelOther').removeClass('hidden');
                     $('#Make').val("Other");
-                    $('#vehicleMakeOther').val(sabio.page.updateVehicleObj.vehicleMake);
-                    console.log(sabio.page.updateVehicleObj.vehicleMake);
+                    $('#vehicleMakeOther').val(spright.page.updateVehicleObj.vehicleMake);
+                    console.log(spright.page.updateVehicleObj.vehicleMake);
                     $('<option/>', { value: 'Other', html: 'Other' }).appendTo('#Model');
                     $('#Model').find("option[value='Other']").attr('selected', true);
-                    $('#vehicleModelOther').val(sabio.page.updateVehicleObj.vehicleModel);
+                    $('#vehicleModelOther').val(spright.page.updateVehicleObj.vehicleModel);
                 }
 
             }
         };
 
 
-        sabio.page.loadModels = function (make) {
+        spright.page.loadModels = function (make) {
 
             console.log("load model by " + make);
-            var models = sabio.page.modelsArray;
+            var models = spright.page.modelsArray;
 
-            //console.log("models here are " + sabio.page.modelsArray);
+            //console.log("models here are " + spright.page.modelsArray);
             //console.log(models);
             for (i = 0; i < models.length; i++) {
                 if (models[i].name === make) {
                     //console.log(models[i]);
-                    sabio.page.populateModels(models[i].models);
+                    spright.page.populateModels(models[i].models);
                     break;
                 }
             }
         };
 
-        sabio.page.populateModels = function (modelsArray) {
+        spright.page.populateModels = function (modelsArray) {
             // clean out the options first
             $('#Model option').remove();
             $('<option/>', { value: '', html: '' }).appendTo('#Model');
@@ -597,85 +597,85 @@
                 // models after a make is selected
             }
             $('<option/>', { value: 'Other', html: 'Other' }).appendTo('#Model');
-            if (sabio.page.updateVehicleObj != null) {
+            if (spright.page.updateVehicleObj != null) {
                 var isNotOther = false;
                 // check if the make is in the list, if not, put it in others
                 for (var i = 0; i < modelsArray.length; i++) {
-                    if (modelsArray[i].name === sabio.page.updateVehicleObj.vehicleModel) {
+                    if (modelsArray[i].name === spright.page.updateVehicleObj.vehicleModel) {
                         isNotOther = true;
                     }
                 }
                 if (isNotOther == true) {
-                    $('#Model').val(sabio.page.updateVehicleObj.vehicleModel);
-                    //sabio.page.loadModels(sabio.page.updateVehicleObj.vehicleMake);
+                    $('#Model').val(spright.page.updateVehicleObj.vehicleModel);
+                    //spright.page.loadModels(spright.page.updateVehicleObj.vehicleMake);
                 } else {
                     $('.vehicleModelOther').removeClass('hidden');
                     //$('#Make').val("Other");
-                    $('#vehicleModelOther').val(sabio.page.updateVehicleObj.vehicleModel);
-                    console.log(sabio.page.updateVehicleObj.vehicleMake);
+                    $('#vehicleModelOther').val(spright.page.updateVehicleObj.vehicleModel);
+                    console.log(spright.page.updateVehicleObj.vehicleMake);
                     //$('<option/>', { value: 'Other', html: 'Other' }).appendTo('#Model');
                     $('#Model').find("option[value='Other']").attr('selected', true);
-                    //$('#vehicleModelOther').val(sabio.page.updateVehicleObj.vehicleModel);
+                    //$('#vehicleModelOther').val(spright.page.updateVehicleObj.vehicleModel);
                 }
             }
         }
 
         //END VEHICLE FORM
 
-        sabio.page.handlers.clearForm = function () {//
+        spright.page.handlers.clearForm = function () {//
             $('#steps-form')[0].reset();
 
         };
 
 
-        sabio.page.handlers.onCreateDealerSuccess = function (data, status, xhr) {
-            sabio.page.dealerId = data.item //check network response tab or response.item
-            console.log("save dealerId", sabio.page.dealerId);
+        spright.page.handlers.onCreateDealerSuccess = function (data, status, xhr) {
+            spright.page.dealerId = data.item //check network response tab or response.item
+            console.log("save dealerId", spright.page.dealerId);
 
         }
 
-        sabio.page.handlers.onAddressCreateSuccess = function (data, status, xhr) {
-            sabio.page.addressId = data.item
-            console.log("save addressId", sabio.page.addressId);
+        spright.page.handlers.onAddressCreateSuccess = function (data, status, xhr) {
+            spright.page.addressId = data.item
+            console.log("save addressId", spright.page.addressId);
             var payload = {
-                AddressId: sabio.page.addressId,
-                DealerId: sabio.page.dealerId
+                AddressId: spright.page.addressId,
+                DealerId: spright.page.dealerId
             }
-            sabio.services.UpgradeDealer.onAddressCreateSuccess(payload, sabio.page.handlers.onDealerAddressSuccess, sabio.page.AjaxError);
+            spright.services.UpgradeDealer.onAddressCreateSuccess(payload, spright.page.handlers.onDealerAddressSuccess, spright.page.AjaxError);
             console.log("2 ids", payload);
         }
 
-        sabio.page.handlers.onDealerAddressSuccess = function (data, status, xhr) {
+        spright.page.handlers.onDealerAddressSuccess = function (data, status, xhr) {
             console.log("DealerAddressSuccess");
         }
-        sabio.page.handlers.onCatCreateSuccess = function (data, status, xhr) {
-            sabio.page.catId = data.item;
-            console.log("save catId", sabio.page.catId);
+        spright.page.handlers.onCatCreateSuccess = function (data, status, xhr) {
+            spright.page.catId = data.item;
+            console.log("save catId", spright.page.catId);
             var payload = {
-                CatId: sabio.page.catId,
-                DealerId: sabio.page.dealerId
+                CatId: spright.page.catId,
+                DealerId: spright.page.dealerId
             }
-            sabio.services.UpgradeDealer.onCatCreateSuccess(payload, sabio.page.AjaxSuccess, sabio.page.AjaxError);
+            spright.services.UpgradeDealer.onCatCreateSuccess(payload, spright.page.AjaxSuccess, spright.page.AjaxError);
 
         }
 
-        sabio.page.handlers.onVehicleCreateSuccess = function (data) {
-            sabio.page.vehicleId = data.item;
+        spright.page.handlers.onVehicleCreateSuccess = function (data) {
+            spright.page.vehicleId = data.item;
             var payload = {
-                VehicleId: sabio.page.vehicleId,
-                DealerId: sabio.page.dealerId
+                VehicleId: spright.page.vehicleId,
+                DealerId: spright.page.dealerId
             }
-            sabio.services.UpgradeDealer.onVehicleCreateSuccess(payload, sabio.page.AjaxSuccess, sabio.page.AjaxError);
-            console.log("save vehicleId", sabio.page.vehicleId, sabio.page.dealerId);
+            spright.services.UpgradeDealer.onVehicleCreateSuccess(payload, spright.page.AjaxSuccess, spright.page.AjaxError);
+            console.log("save vehicleId", spright.page.vehicleId, spright.page.dealerId);
         }
-        sabio.page.AjaxSuccess = function (data, status, xhr) {
+        spright.page.AjaxSuccess = function (data, status, xhr) {
             console.log("ajax success creating messages")
 
 
 
         }
 
-        sabio.page.AjaxError = function (jqXHR, textStatus, errorThrown) {
+        spright.page.AjaxError = function (jqXHR, textStatus, errorThrown) {
 
             console.error("error creating messages", jqXHR);
         }
